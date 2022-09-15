@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.7.3'
 	id 'io.spring.dependency-management' version '1.0.13.RELEASE'
 	id 'java'
+	id "org.asciidoctor.convert" version "2.4.0" // REST Docs
 }
 
 group = 'com.example'
@@ -13,10 +14,64 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
+	asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor' // REST Docs
+	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc' // REST Docs
+
+	implementation 'org.springframework.boot:spring-boot-starter-websocket' // 웹소켓
+	implementation 'org.springframework.security:spring-security-messaging' // AbstractSecurityWebSocketMessageBrokerConfigurer - 웹소켓 시큐리티에 쓸거
+	implementation 'org.springframework.boot:spring-boot-starter-security' // 시큐리티 - 기본 시큐리티
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // ORM
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc' // DB
+
+	implementation 'org.springframework.boot:spring-boot-starter-aop' // Aspect Oriented Programming - 관점 지향 프로그래밍 - 컨트롤러 전처리 벨리데이션할 때 쓸거
+	implementation 'org.springframework.boot:spring-boot-starter-validation' // AOP와 함께 밸리데이션
+
+	implementation 'org.mariadb.jdbc:mariadb-java-client' // 마리아 DB
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis' // 레디스 - 인메모리 DB
+
+	implementation 'com.auth0:java-jwt:3.4.1' // JWT를 편리하게 구현할 수 있게 도와줌
+
+
+	compileOnly 'org.projectlombok:lombok:1.18.22' // Getter, Setter, Builder 등 객체사용 편리 도구
+	testCompileOnly 'org.projectlombok:lombok:1.18.22'
+	annotationProcessor 'org.projectlombok:lombok:1.18.22' // Build 시 인식못하는 문제 해결
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+
+// ========== REST Docs Begin ==========
+
+asciidoctor.doFirst {
+	delete file('src/main/resources/static/docs')
+}
+
+ext {
+	snippetsDir = file('build/generated-snippets')
+}
+
+test {
+	outputs.dir snippetsDir
+}
+
+asciidoctor {
+	inputs.dir snippetsDir
+	dependsOn test
+}
+
+bootJar {
+	dependsOn asciidoctor
+	// build/asciidoc/html5/에 html파일을 src/main/resources/static/doc 복사하려면
+	copy {
+		from "build/asciidoc/html5"
+		into "src/main/resources/static/docs"
+	}
+}
+
+// ========== REST Docs End ==========
