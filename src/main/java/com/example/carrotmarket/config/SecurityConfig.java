@@ -35,6 +35,7 @@ public class SecurityConfig {
                 // "/api/user/test" permitAll 을 "/api/user/**" .hasRole("USER") 뒤에 하면 안먹힘!
                 .antMatchers("/login").permitAll()
                 .antMatchers("/api/user/join","/api/user/nicknameCk").permitAll()
+                .antMatchers("/api/user/**").hasRole(UserRoleType.USER.getValue())
                 .anyRequest().authenticated();
         return http.build();
     }

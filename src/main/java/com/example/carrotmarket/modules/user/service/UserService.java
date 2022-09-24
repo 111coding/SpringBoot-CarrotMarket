@@ -8,6 +8,7 @@ import com.example.carrotmarket.modules.address.domain.entity.Address;
 import com.example.carrotmarket.modules.address.service.AddressService;
 import com.example.carrotmarket.modules.user.domain.dto.JoinRequestDto;
 import com.example.carrotmarket.modules.user.domain.dto.KakaoUserInfoDto;
+import com.example.carrotmarket.modules.user.domain.dto.UserDto;
 import com.example.carrotmarket.modules.user.domain.entity.User;
 import com.example.carrotmarket.modules.user.domain.entity.UserAddress;
 import com.example.carrotmarket.modules.user.repository.UserAddressRepository;
@@ -71,6 +72,10 @@ public class UserService {
         }
     }
 
+    public UserDto myInfo(Long userIdx){
+        User user = userRepository.findByIdxFetchProfileImage(userIdx).orElseThrow(() -> new CustomApiException(ResponseEnum.USER_NOT_FOUND));
+        return new UserDto(user);
+    }
 
 
 }
