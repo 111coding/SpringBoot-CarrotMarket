@@ -1,0 +1,37 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+  mvc:
+    static-path-pattern: /**
+    static-locations: /static/
+    add-mappings: true
+
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3333/CHAT?serverTimezone=Asia/Seoul
+    username: coding111 # maria-db username
+    password: 111Coding!@ # maria-db password
+
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: create
+#      ddl-auto: update
+#      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+
+  redis:
+    host: localhost
+    port: 6666
