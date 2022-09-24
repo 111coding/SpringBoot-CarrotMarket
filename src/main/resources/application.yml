@@ -43,6 +43,6 @@ spring:
       max-request-size: 10MB # 최대 요청 사이즈
       location: /Users/krust/Desktop/fileUploadDir # 실제 파일이 저장될 곳(디렉토리 만들고 권한 줘야함)
 
-  key:
-    oauth:
-      kakao: ADMIN_KEY
+key:
+  oauth:
+    kakao: ADMIN_KEY
