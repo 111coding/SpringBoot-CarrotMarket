@@ -18,7 +18,10 @@ public enum ResponseEnum {
     AUTH_INVALID_TOKEN(401, "invalid token"),
     AUTH_NOT_JOINED(405, "not joined user"),
     AUTH_REFRESH_DOES_NOT_EXIST(401, "REFRESH_DOES_NOT_EXIST"),
-    AUTH_REFRESH_EXPIRED(401, "AUTH_REFRESH_EXPIRED");
+    AUTH_REFRESH_EXPIRED(401, "AUTH_REFRESH_EXPIRED"),
+
+    USER_USERNAME_CK_SUCCESS(200, "사용가능한 아이디입니다."),
+    USER_USERNAME_CK_FAIL(500, "사융할 수 없는 아이디입니다.");
 
 
     private final int code;
