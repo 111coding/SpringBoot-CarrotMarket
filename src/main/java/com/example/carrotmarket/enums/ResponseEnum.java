@@ -27,7 +27,10 @@ public enum ResponseEnum {
     USER_JOIN_FAIL(500, "다시 시도해주세요."),
 
     USER_MY_INFO_SUCCESS(200,"조회 성공"),
-    USER_NOT_FOUND(401,"회원이 존재하지 않습니다");
+    USER_NOT_FOUND(401,"회원이 존재하지 않습니다"),
+
+    USER_PROFILE_CHANGE_SUCCESS(200, "변경이 완료되었습니다"),
+    USER_PROFILE_CHANGE_YET(200, "마지막 변경일로부터 30일 이후 변경 가능합니다");
 
 
     private final int code;

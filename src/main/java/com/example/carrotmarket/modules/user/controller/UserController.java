@@ -5,6 +5,7 @@ import com.example.carrotmarket.config.auth.PrincipalDetails;
 import com.example.carrotmarket.enums.ResponseEnum;
 import com.example.carrotmarket.modules.user.domain.dto.JoinRequestDto;
 import com.example.carrotmarket.modules.user.domain.dto.UserDto;
+import com.example.carrotmarket.modules.user.domain.dto.UserEditDto;
 import com.example.carrotmarket.modules.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -40,6 +41,15 @@ public class UserController {
         PrincipalDetails details = (PrincipalDetails) authentication.getPrincipal();
         UserDto result = userService.myInfo(details.getUser().getIdx());
         return new ResponseEntity<>(new ResponseDto<>(ResponseEnum.USER_MY_INFO_SUCCESS, result), HttpStatus.OK);
+    }
+
+    @PostMapping("/editProfile")
+    public ResponseEntity<?> editProfile(@Valid @RequestBody UserEditDto userEditDto,
+                                         BindingResult bindingResult,
+                                         Authentication authentication){
+        PrincipalDetails details = (PrincipalDetails) authentication.getPrincipal();
+        userService.editProfile(userEditDto, details.getUser().getIdx());
+        return new ResponseEntity<>(new ResponseDto<>(ResponseEnum.USER_PROFILE_CHANGE_SUCCESS), HttpStatus.OK);
     }
 
 }
