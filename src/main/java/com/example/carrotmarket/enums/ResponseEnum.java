@@ -68,7 +68,12 @@ public enum ResponseEnum {
     PRODUCT_UPDATE_TIME_SUCCESS(200,"성공"),
     PRODUCT_UPDATE_TIME_FAIL(400,"횟수초과"),
 
-    PRODUCT_DELETE_SUCCESS(200,"삭제 성공");
+    PRODUCT_DELETE_SUCCESS(200,"삭제 성공"),
+
+    CHAT_ROOM_MAKE_SUCCESS(200, "생성 성공"),
+    CHAT_ROOM_MAKE_EXIST(-1,"이미 존재하는 채팅방 입니다"),
+    CHAT_ROOM_CAN_NOT_TO_ME(-1,"자기 자신에게는 보낼 수 없습니다"),
+    CHAT_ROOM_MAKE_PRODUCT_NOT_EXIST(-1,"존재하지 않는 상품입니다");
 
 
     private final int code;
