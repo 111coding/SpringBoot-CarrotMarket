@@ -74,4 +74,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                          @Param("minPrice") int minPrice,
                          @Param("maxPrice") int maxPrice,
                          Pageable pageable);
+
+
+    // 자신의 글만 가져오게!(수정용)
+    @EntityGraph(attributePaths = {"address", "category", "user", "imageFiles"})
+    Optional<Product> findByIdxAndUser_Idx(Long productIdx, Long userIdx);
 }

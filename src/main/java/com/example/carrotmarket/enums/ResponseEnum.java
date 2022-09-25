@@ -60,7 +60,10 @@ public enum ResponseEnum {
     PRODUCT_NOT_FOUND(400,"존재하지 않는 상품입니다"),
 
     PRODUCT_SEARCH_SUCCESS(200,"조회에 성공하였습니다"),
-    PRODUCT_SEARCH_FAIL(400,"조회에 실패하였습니다");
+    PRODUCT_SEARCH_FAIL(400,"조회에 실패하였습니다"),
+
+    PRODUCT_UPDATE_SUCCESS(200,"수정 성공"),
+    PRODUCT_NO_PERMISSION(401,"권한없음");
 
 
     private final int code;

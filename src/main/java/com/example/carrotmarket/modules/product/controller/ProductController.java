@@ -65,4 +65,12 @@ public class ProductController {
         return new ResponseEntity<>(new ResponseDto<>(ResponseEnum.PRODUCT_SEARCH_SUCCESS, productService.search(requestDto,pageable)), HttpStatus.OK);
     }
 
+    @PostMapping("/update")
+    public ResponseEntity<?> update(@Valid @RequestBody ProductRequestDto productRequestDto,
+                                    BindingResult bindingResult, Authentication authentication){
+        PrincipalDetails details = (PrincipalDetails) authentication.getPrincipal();
+        productService.update(productRequestDto,details.getUser().getIdx());
+        return new ResponseEntity<>( new ResponseDto<>(ResponseEnum.PRODUCT_UPDATE_SUCCESS), HttpStatus.OK);
+    }
+
 }

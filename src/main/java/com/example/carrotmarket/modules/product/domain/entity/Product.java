@@ -84,4 +84,15 @@ public class Product {
         this.price = requestDto.getPrice();
     }
 
+    public void update(ProductRequestDto requestDto){
+        this.title = requestDto.getTitle();
+        this.content = requestDto.getContent();
+        this.category = ProductCategory.builder().idx(requestDto.getCategoryIdx()).build();
+        this.imageFiles = requestDto.getImageFileIdxList()
+                .stream()
+                .map(fileIdx -> File.builder().idx(fileIdx).build())
+                .collect(Collectors.toList());
+        this.price = requestDto.getPrice();
+    }
+
 }

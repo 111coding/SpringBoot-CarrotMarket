@@ -136,4 +136,12 @@ public class ProductService {
         }
     }
 
+    @Transactional
+    public void update(ProductRequestDto dto, Long userIdx){
+        Optional<Product> productOpt = productRepository.findByIdxAndUser_Idx(dto.getIdx(), userIdx);
+        // 해당 유저의 글이 아닐경우 바로 throw!
+        Product product = productOpt.orElseThrow(() -> new CustomApiException(ResponseEnum.PRODUCT_NO_PERMISSION));
+        product.update(dto);
+    }
+
 }
