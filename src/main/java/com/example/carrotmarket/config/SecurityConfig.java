@@ -45,7 +45,7 @@ public class SecurityConfig {
         // filter 자체를 안탐
         return (web) -> web
                 .ignoring()
-                .antMatchers("/api/file/**");
+                .antMatchers("/api/file/**","/api/product/category");
     }
 
     @Bean
