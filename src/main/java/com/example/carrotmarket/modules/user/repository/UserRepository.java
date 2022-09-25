@@ -15,4 +15,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @EntityGraph(attributePaths = {"profileImage"})
     @Query(" FROM User user WHERE user.idx = :userIdx")
     Optional<User> findByIdxFetchProfileImage(@Param("userIdx") Long userIdx);
+
+    //    @Query("SELECT DISTINCT user" +
+//            " FROM User user" +
+//            " LEFT JOIN FETCH user.addresses" +
+//            " WHERE user.idx = :userIdx")
+    @EntityGraph(attributePaths = {"addresses"})
+    @Query(" FROM User user WHERE user.idx = :userIdx")
+    Optional<User> findByUserIdxFetchAddresses(@Param("userIdx") Long userIdx);
 }
