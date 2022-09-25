@@ -6,6 +6,9 @@ import com.example.carrotmarket.enums.ResponseEnum;
 import com.example.carrotmarket.modules.product.domain.dto.ProductRequestDto;
 import com.example.carrotmarket.modules.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -39,6 +42,13 @@ public class ProductController {
     public ResponseEntity<?> like(@PathVariable Long productIdx, Authentication authentication){
         PrincipalDetails details = (PrincipalDetails) authentication.getPrincipal();
         return new ResponseEntity<>(new ResponseDto<>(ResponseEnum.PRODUCT_LIKE_SUCCESS, productService.like(details.getUser().getIdx(),productIdx)), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<?> list(
+            @RequestParam Long addressIdx,
+            @PageableDefault(size=10, sort="idx", direction = Sort.Direction.DESC) Pageable pageable){
+        return new ResponseEntity<>(new ResponseDto<>(ResponseEnum.PRODUCT_LIST_SUCCESS, productService.list(addressIdx,pageable)), HttpStatus.OK);
     }
 
 }

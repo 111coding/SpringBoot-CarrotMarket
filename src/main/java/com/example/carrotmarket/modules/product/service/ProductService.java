@@ -2,6 +2,7 @@ package com.example.carrotmarket.modules.product.service;
 
 import com.example.carrotmarket.enums.ResponseEnum;
 import com.example.carrotmarket.handler.exception.CustomApiException;
+import com.example.carrotmarket.modules.product.domain.dto.ProductListResponseDto;
 import com.example.carrotmarket.modules.product.domain.dto.ProductRequestDto;
 import com.example.carrotmarket.modules.product.domain.entity.Product;
 import com.example.carrotmarket.modules.product.domain.entity.ProductLike;
@@ -10,7 +11,10 @@ import com.example.carrotmarket.modules.product.repository.ProductRepository;
 import com.example.carrotmarket.modules.user.domain.entity.User;
 import com.example.carrotmarket.modules.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.Optional;
@@ -72,6 +76,16 @@ public class ProductService {
             }
         }catch (Exception e){
             throw new CustomApiException(ResponseEnum.PRODUCT_LIKE_FAIL);
+        }
+    }
+
+    @Transactional
+    public Page<ProductListResponseDto> list(Long addressIdx, Pageable pageable){
+        try{
+            return productRepository.list(addressIdx,pageable).map(ProductListResponseDto::new);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new CustomApiException(ResponseEnum.PRODUCT_LIST_FAIL);
         }
     }
 
