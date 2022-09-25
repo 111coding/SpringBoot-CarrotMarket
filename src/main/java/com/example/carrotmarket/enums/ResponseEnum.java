@@ -48,7 +48,10 @@ public enum ResponseEnum {
     PRODUCT_CATEGORY_FAIL(400,"조회에 실패하였습니다"),
 
     PRODUCT_UPLOAD_SUCCESS(200,"상품 업로드에 성공하였습니다"),
-    PRODUCT_UPLOAD_ADDRESS_NOT_MATCHED(404,"업로드할 수 없는 동네입니다");
+    PRODUCT_UPLOAD_ADDRESS_NOT_MATCHED(404,"업로드할 수 없는 동네입니다"),
+
+    PRODUCT_LIKE_SUCCESS(200,"성공"),
+    PRODUCT_LIKE_FAIL(500,"실패");
 
 
     private final int code;

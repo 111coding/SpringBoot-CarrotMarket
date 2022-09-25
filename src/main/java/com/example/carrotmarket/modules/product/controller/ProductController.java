@@ -35,4 +35,10 @@ public class ProductController {
         return new ResponseEntity<>(new ResponseDto<>(ResponseEnum.PRODUCT_UPLOAD_SUCCESS), HttpStatus.CREATED);
     }
 
+    @PostMapping("/like/{productIdx}")
+    public ResponseEntity<?> like(@PathVariable Long productIdx, Authentication authentication){
+        PrincipalDetails details = (PrincipalDetails) authentication.getPrincipal();
+        return new ResponseEntity<>(new ResponseDto<>(ResponseEnum.PRODUCT_LIKE_SUCCESS, productService.like(details.getUser().getIdx(),productIdx)), HttpStatus.OK);
+    }
+
 }

@@ -4,6 +4,8 @@ import com.example.carrotmarket.enums.ResponseEnum;
 import com.example.carrotmarket.handler.exception.CustomApiException;
 import com.example.carrotmarket.modules.product.domain.dto.ProductRequestDto;
 import com.example.carrotmarket.modules.product.domain.entity.Product;
+import com.example.carrotmarket.modules.product.domain.entity.ProductLike;
+import com.example.carrotmarket.modules.product.repository.ProductLikeRepository;
 import com.example.carrotmarket.modules.product.repository.ProductRepository;
 import com.example.carrotmarket.modules.user.domain.entity.User;
 import com.example.carrotmarket.modules.user.repository.UserRepository;
@@ -21,6 +23,9 @@ public class ProductService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    ProductLikeRepository productLikeRepository;
 
 
     public void save(ProductRequestDto dto, User principalUser){
@@ -47,4 +52,27 @@ public class ProductService {
 
         productRepository.save(product);
     }
+
+    public boolean like(Long userIdx, Long productIdx){
+        // 현재 좋아요 상태 리턴
+        try{
+            Optional<ProductLike> like = productLikeRepository.findByUser_IdxAndProduct_Idx(userIdx, productIdx);
+            if(like.isPresent()){
+                productLikeRepository.delete(like.get());
+                return false;
+            }else{
+                Product product = Product.builder().idx(productIdx).build();
+                User user = User.builder().idx(userIdx).build();
+                ProductLike productLike = ProductLike.builder()
+                        .product(product)
+                        .user(user)
+                        .build();
+                productLikeRepository.save(productLike);
+                return true;
+            }
+        }catch (Exception e){
+            throw new CustomApiException(ResponseEnum.PRODUCT_LIKE_FAIL);
+        }
+    }
+
 }
