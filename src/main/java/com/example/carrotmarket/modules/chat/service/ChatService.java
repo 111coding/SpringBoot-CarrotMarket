@@ -65,4 +65,20 @@ public class ChatService {
         return roomOpt.stream().map(ChatRoomDto::new).collect(Collectors.toList());
     }
 
+    @Transactional
+    public ChatRoomDto roomDetail(User user, Long roomIdx){
+        ChatRoom chatRoom = chatRoomRepository.findByIdxFetchMessages(roomIdx).orElseThrow(() -> new CustomApiException(ResponseEnum.CHAT_ROOM_NOT_EXIST));
+        checkRoomPermission(chatRoom, user);
+        return new ChatRoomDto(chatRoom);
+    }
+
+    private void checkRoomPermission(ChatRoom chatRoom, User user){
+        Long productUserIdx = chatRoom.getProduct().getUser().getIdx();
+        Long senderIdx = chatRoom.getSender().getIdx();
+        if(!(productUserIdx.equals(user.getIdx()) || senderIdx.equals(user.getIdx()))){
+            // 내가 접근할 수 있는 채팅방이 아니면 throw!
+            throw new CustomApiException(ResponseEnum.CHAT_ROOM_NOT_PERMISSION);
+        }
+    }
+
 }

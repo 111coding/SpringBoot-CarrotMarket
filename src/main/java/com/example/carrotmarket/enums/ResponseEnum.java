@@ -75,7 +75,11 @@ public enum ResponseEnum {
     CHAT_ROOM_CAN_NOT_TO_ME(-1,"자기 자신에게는 보낼 수 없습니다"),
     CHAT_ROOM_MAKE_PRODUCT_NOT_EXIST(-1,"존재하지 않는 상품입니다"),
 
-    CHAT_ROOM_LIST_SUCCESS(200, "조회 성공");
+    CHAT_ROOM_LIST_SUCCESS(200, "조회 성공"),
+
+    CHAT_ROOM_DETAIL_SUCCESS(200, "조회 성공"),
+    CHAT_ROOM_NOT_EXIST(-1,"존재하지 않는 채팅방입니다"),
+    CHAT_ROOM_NOT_PERMISSION(-1,"접근할 수 없는 채팅방입니다");
 
 
     private final int code;

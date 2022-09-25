@@ -37,4 +37,11 @@ public class ChatController {
         return new ResponseEntity<>(new ResponseDto<>(ResponseEnum.CHAT_ROOM_LIST_SUCCESS, msgList), HttpStatus.OK);
     }
 
+    @GetMapping("/room/{roomIdx}")
+    public ResponseEntity<?> roomDetail(Authentication authentication, @PathVariable @NotNull Long roomIdx){
+        PrincipalDetails details = (PrincipalDetails) authentication.getPrincipal();
+        ChatRoomDto roomDto = chatService.roomDetail(details.getUser(),roomIdx);
+        return new ResponseEntity<>(new ResponseDto<>(ResponseEnum.CHAT_ROOM_DETAIL_SUCCESS, roomDto), HttpStatus.OK);
+    }
+
 }
