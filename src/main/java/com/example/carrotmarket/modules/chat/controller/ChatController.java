@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/chat")
@@ -27,6 +28,13 @@ public class ChatController {
         PrincipalDetails details = (PrincipalDetails) authentication.getPrincipal();
         ChatRoomDto roomDto = chatService.makeRoom(details.getUser().getIdx(), productIdx);
         return new ResponseEntity<>(new ResponseDto<>(ResponseEnum.CHAT_ROOM_MAKE_SUCCESS, roomDto), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/room/list")
+    public ResponseEntity<?> roomList(Authentication authentication){
+        PrincipalDetails details = (PrincipalDetails) authentication.getPrincipal();
+        List<ChatRoomDto> msgList = chatService.roomList(details.getUser());
+        return new ResponseEntity<>(new ResponseDto<>(ResponseEnum.CHAT_ROOM_LIST_SUCCESS, msgList), HttpStatus.OK);
     }
 
 }

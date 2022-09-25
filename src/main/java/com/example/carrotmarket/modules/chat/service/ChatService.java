@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ChatService {
@@ -55,6 +57,12 @@ public class ChatService {
         chatRoomRepository.save(chatRoom);
         return new ChatRoomDto(chatRoom);
 
+    }
+
+    @Transactional
+    public List<ChatRoomDto> roomList(User user){
+        List<ChatRoom> roomOpt = chatRoomRepository.findAllByUserIdxFetchAll(user.getIdx());
+        return roomOpt.stream().map(ChatRoomDto::new).collect(Collectors.toList());
     }
 
 }
