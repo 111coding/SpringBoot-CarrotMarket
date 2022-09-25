@@ -144,4 +144,17 @@ public class ProductService {
         product.update(dto);
     }
 
+    @Transactional
+    public void updateUpdateAt(Long userIdx, Long productIdx){
+        Optional<Product> productOpt = productRepository.findByIdxAndUser_Idx(productIdx, userIdx);
+        // 해당 유저의 글이 아닐경우 바로 throw!
+        Product product = productOpt.orElseThrow(() -> new CustomApiException(ResponseEnum.PRODUCT_NO_PERMISSION));
+        if(product.getUpdateRemainCnt()>0){
+            product.setUpdateAt(new Timestamp(System.currentTimeMillis()));
+            product.setUpdateRemainCnt(product.getUpdateRemainCnt() - 1);
+        }else{
+            throw new CustomApiException(ResponseEnum.PRODUCT_UPDATE_TIME_FAIL);
+        }
+    }
+
 }

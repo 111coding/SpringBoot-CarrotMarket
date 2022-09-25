@@ -73,4 +73,11 @@ public class ProductController {
         return new ResponseEntity<>( new ResponseDto<>(ResponseEnum.PRODUCT_UPDATE_SUCCESS), HttpStatus.OK);
     }
 
+    @PostMapping("/updateTime/{productIdx}")
+    public ResponseEntity<?> updateTime(@PathVariable Long productIdx, Authentication authentication){
+        PrincipalDetails details = (PrincipalDetails) authentication.getPrincipal();
+        productService.updateUpdateAt(details.getUser().getIdx(),productIdx);
+        return new ResponseEntity<>( new ResponseDto<>(ResponseEnum.PRODUCT_UPDATE_TIME_SUCCESS), HttpStatus.OK);
+    }
+
 }
