@@ -1,9 +1,13 @@
 package com.example.carrotmarket.modules.chat.service;
 
+import com.example.carrotmarket.enums.ChatMessageType;
 import com.example.carrotmarket.enums.ResponseEnum;
 import com.example.carrotmarket.handler.exception.CustomApiException;
+import com.example.carrotmarket.modules.chat.domain.dto.ChatRequestDto;
 import com.example.carrotmarket.modules.chat.domain.dto.ChatRoomDto;
+import com.example.carrotmarket.modules.chat.domain.entity.ChatMessage;
 import com.example.carrotmarket.modules.chat.domain.entity.ChatRoom;
+import com.example.carrotmarket.modules.chat.repository.ChatMessageRepository;
 import com.example.carrotmarket.modules.chat.repository.ChatRoomRepository;
 import com.example.carrotmarket.modules.product.domain.entity.Product;
 import com.example.carrotmarket.modules.product.repository.ProductRepository;
@@ -19,6 +23,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class ChatService {
+
+    @Autowired
+    private ChatMessageRepository chatMessageRepository;
 
     @Autowired
     private ChatRoomRepository chatRoomRepository;
@@ -79,6 +86,28 @@ public class ChatService {
             // 내가 접근할 수 있는 채팅방이 아니면 throw!
             throw new CustomApiException(ResponseEnum.CHAT_ROOM_NOT_PERMISSION);
         }
+    }
+
+    @Transactional
+    public ChatRoomDto sendMessage(ChatRequestDto message, User user) {
+
+        ChatRoom chatRoom = chatRoomRepository.findByIdx(message.getRoomIdx()).orElseThrow(() -> new CustomApiException(ResponseEnum.CHAT_ROOM_NOT_EXIST));
+
+        checkRoomPermission(chatRoom, user);
+
+        ChatMessageType chatMessageType = chatRoom.getProduct().getUser().getIdx().equals(user.getIdx()) ?
+                ChatMessageType.PRODUCT_OWNER_TO_SENDER:
+                ChatMessageType.SENDER_TO_PRODUCT_OWNER;
+
+        ChatMessage chatMessage = ChatMessage.builder()
+                .messageType(chatMessageType)
+                .chatRoom(chatRoom)
+                .content(message.getContent())
+                .build();
+
+        chatMessageRepository.save(chatMessage);
+
+        return new ChatRoomDto(chatRoom, chatMessage);
     }
 
 }

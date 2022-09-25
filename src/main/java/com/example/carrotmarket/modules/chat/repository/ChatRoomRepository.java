@@ -36,4 +36,10 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     @Query("FROM ChatRoom room WHERE room.idx = :roomIdx")
     Optional<ChatRoom> findByIdxFetchMessages(@Param("roomIdx") Long roomIdx);
 
+
+    // [ChatMessage Save 전 조회용!]
+    // List(messages)는 조인 불필요, DTO로 받으면 안됨!(ChatMessage save 시 사용)
+    @EntityGraph(attributePaths = {"product.user", "sender"})
+    Optional<ChatRoom> findByIdx(Long roomIdx);
+
 }
