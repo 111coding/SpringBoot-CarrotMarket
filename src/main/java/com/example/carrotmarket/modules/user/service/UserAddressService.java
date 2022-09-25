@@ -91,4 +91,28 @@ public class UserAddressService {
 
     }
 
+    @Transactional
+    public void addressRemove(Long addressIdx, User principalUser){
+        List<UserAddress> userAddresses = userAddressRepository.findByUserIdxFetch(principalUser.getIdx());
+        if(userAddresses.isEmpty()){
+            throw new CustomApiException(ResponseEnum.USER_NOT_FOUND);
+        }
+        if(userAddresses.size() == 1){
+            // 한개의 주소는 무조건 가져야함
+            throw new CustomApiException(ResponseEnum.USER_ADDRESS_REMOVE_MUST_HAVE_ONE);
+        }
+
+        List<UserAddress> targetAddresses = userAddresses.stream()
+                .filter(userAddress -> userAddress.getAddress().getIdx().equals(addressIdx))
+                .collect(Collectors.toList());
+
+        if(targetAddresses.isEmpty()){
+            throw new CustomApiException(ResponseEnum.USER_ADDRESS_REMOVE_DO_NOT_HAVE_ADDRESS);
+        }
+        userAddressRepository.delete(targetAddresses.get(0));
+        userAddresses.remove(targetAddresses.get(0));
+        userAddresses.get(0).setDefaultYn(true);
+
+    }
+
 }

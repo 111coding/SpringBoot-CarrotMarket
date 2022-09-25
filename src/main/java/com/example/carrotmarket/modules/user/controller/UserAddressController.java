@@ -46,5 +46,11 @@ public class UserAddressController {
         return new ResponseEntity<>(new ResponseDto<>(ResponseEnum.USER_ADDRESS_UPDATE_SUCCESS), HttpStatus.OK);
     }
 
+    @DeleteMapping("/{addressIdx}")
+    public ResponseEntity<?> addressRemove(@PathVariable Long addressIdx,Authentication authentication){
+        PrincipalDetails details = (PrincipalDetails) authentication.getPrincipal();
+        userAddressService.addressRemove(addressIdx,details.getUser());
+        return new ResponseEntity<>(new ResponseDto<>(ResponseEnum.USER_ADDRESS_REMOVE_SUCCESS), HttpStatus.OK);
+    }
 
 }
