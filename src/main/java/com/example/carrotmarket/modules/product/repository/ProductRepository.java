@@ -39,4 +39,39 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     // likes는 조회쿼리 하나 더 날리자!
     @EntityGraph(attributePaths = {"address", "category", "user.profileImage", "imageFiles"})
     Optional<Product> findByIdx(Long idx);
+
+
+    // 회원별조회
+
+    //    @EntityGraph(attributePaths = {"imageFiles", "user", "address","category"})
+    @EntityGraph(attributePaths = {"address","user"})
+    Page<Product> findByUser_Nickname(String userNickname, Pageable pageable);
+
+    // 지역별 (카테고리, 가격범위, 정확도순-최신순, 검색어)
+    // category LIKE로 한 이유 : 전체일 때 공백 넣을거임
+
+    // Pageable 에 fetch join 을 사용하면 limit 문 사용 X
+    // 1:N N:N 관계를 fetch join 하게 되면, 몇 개의 row까지 가지고 와야하는지 예측할 수 없어서 firstResult, maxResults 설정 값이 무시
+    // limit 을 두지 않고 조회한 결과를 모두 java memory 에 올려놓고 pagination 을 위한 계산
+    // 해결 : @BatchSize(size=100) & @ManyToMany(fetch = FetchType.EAGER)
+    // firstResult/maxResults specified with collection fetch; applying in memory!
+    //
+    // 검색 정확도 순 하려면 MetadataBuilderContributor 사용해서 replace 함수 등록해줘서
+    // 1 - LENGTH(function('REPLACE',c.title,:searchStr,'')) / LENGTH(c.title) 로 사용하고 interface(겟프로덕트, 겟정확도) 만들어서 Page<만든인터페이스> 사용
+    // application.yml : MetadataBuilderContributor -> metadata_builder_contributor : com.example.carrotmarket.config.DatabaseFunctionConfig
+    // @EntityGraph(attributePaths = {"imageFiles", "user", "address","category"})
+    @EntityGraph(attributePaths = {"address", "category", "user"})
+    @Query(   " FROM Product p"
+            + " WHERE p.address.idx = :addressIdx"
+            + " AND p.category.category LIKE %:category%"
+            + " AND (title LIKE %:searchStr% OR content LIKE %:searchStr%)"
+            + " AND p.price >= :minPrice"
+            + " AND p.price <= :maxPrice"
+    )
+    Page<Product> search(@Param("addressIdx") Long addressIdx,
+                         @Param("category") String category,
+                         @Param("searchStr") String searchStr,
+                         @Param("minPrice") int minPrice,
+                         @Param("maxPrice") int maxPrice,
+                         Pageable pageable);
 }

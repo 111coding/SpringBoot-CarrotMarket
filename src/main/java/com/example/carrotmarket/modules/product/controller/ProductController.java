@@ -3,6 +3,7 @@ package com.example.carrotmarket.modules.product.controller;
 import com.example.carrotmarket.common.ResponseDto;
 import com.example.carrotmarket.config.auth.PrincipalDetails;
 import com.example.carrotmarket.enums.ResponseEnum;
+import com.example.carrotmarket.modules.product.domain.dto.ProductListRequestDto;
 import com.example.carrotmarket.modules.product.domain.dto.ProductRequestDto;
 import com.example.carrotmarket.modules.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,13 @@ public class ProductController {
     public ResponseEntity<?> detail(@PathVariable Long productIdx, Authentication authentication){
         PrincipalDetails details = (PrincipalDetails) authentication.getPrincipal();
         return new ResponseEntity<>(new ResponseDto<>(ResponseEnum.PRODUCT_DETAIL_SUCCESS, productService.detail(productIdx,details.getUser().getIdx())), HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> search(
+            ProductListRequestDto requestDto,
+            @PageableDefault(size=10, sort="idx", direction = Sort.Direction.DESC) Pageable pageable){
+        return new ResponseEntity<>(new ResponseDto<>(ResponseEnum.PRODUCT_SEARCH_SUCCESS, productService.search(requestDto,pageable)), HttpStatus.OK);
     }
 
 }

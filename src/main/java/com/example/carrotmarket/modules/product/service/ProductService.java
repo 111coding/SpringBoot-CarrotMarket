@@ -2,6 +2,7 @@ package com.example.carrotmarket.modules.product.service;
 
 import com.example.carrotmarket.enums.ResponseEnum;
 import com.example.carrotmarket.handler.exception.CustomApiException;
+import com.example.carrotmarket.modules.product.domain.dto.ProductListRequestDto;
 import com.example.carrotmarket.modules.product.domain.dto.ProductListResponseDto;
 import com.example.carrotmarket.modules.product.domain.dto.ProductRequestDto;
 import com.example.carrotmarket.modules.product.domain.dto.ProductResponseDto;
@@ -101,6 +102,38 @@ public class ProductService {
                 .stream().anyMatch(productLike -> Objects.equals(productLike.getUser().getIdx(), userIdx));
         dto.setMyLike(myLike);
         return dto;
+    }
+
+    @Transactional
+    public Page<ProductListResponseDto> search(ProductListRequestDto requestDto, Pageable pageable){
+        // 쿼리 스트링 중 닉네임이 비어있으면 단어검색, 아닐 시 닉네임검색
+        return requestDto.getNickname().isBlank() ?
+                searchByWord(requestDto,pageable) :
+                searchByNickname(requestDto,pageable);
+    }
+
+    private Page<ProductListResponseDto> searchByNickname(ProductListRequestDto requestDto, Pageable pageable){
+        try{
+            return productRepository.findByUser_Nickname(requestDto.getNickname(),pageable)
+                    .map(ProductListResponseDto::new);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new CustomApiException(ResponseEnum.PRODUCT_SEARCH_FAIL);
+        }
+    }
+
+    private Page<ProductListResponseDto> searchByWord(ProductListRequestDto requestDto, Pageable pageable){
+        try{
+            return productRepository.search(requestDto.getAddressIdx(),
+                    requestDto.getCategory(),
+                    requestDto.getSearchStr(),
+                    requestDto.getMinPrice(),
+                    requestDto.getMaxPrice(),
+                    pageable).map(ProductListResponseDto::new);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new CustomApiException(ResponseEnum.PRODUCT_SEARCH_FAIL);
+        }
     }
 
 }
