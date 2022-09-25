@@ -66,7 +66,9 @@ public enum ResponseEnum {
     PRODUCT_NO_PERMISSION(401,"권한없음"),
 
     PRODUCT_UPDATE_TIME_SUCCESS(200,"성공"),
-    PRODUCT_UPDATE_TIME_FAIL(400,"횟수초과");
+    PRODUCT_UPDATE_TIME_FAIL(400,"횟수초과"),
+
+    PRODUCT_DELETE_SUCCESS(200,"삭제 성공");
 
 
     private final int code;

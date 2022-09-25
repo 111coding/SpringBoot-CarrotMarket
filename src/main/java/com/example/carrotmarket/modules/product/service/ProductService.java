@@ -157,4 +157,12 @@ public class ProductService {
         }
     }
 
+    @Transactional
+    public void delete(Long userIdx, Long productIdx){
+        Optional<Product> productOpt = productRepository.findByIdxAndUser_Idx(productIdx, userIdx);
+        // 해당 유저의 글이 아닐경우 바로 throw!
+        Product product = productOpt.orElseThrow(() -> new CustomApiException(ResponseEnum.PRODUCT_NO_PERMISSION));
+        productRepository.delete(product);
+    }
+
 }

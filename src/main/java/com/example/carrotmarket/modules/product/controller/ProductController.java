@@ -80,4 +80,11 @@ public class ProductController {
         return new ResponseEntity<>( new ResponseDto<>(ResponseEnum.PRODUCT_UPDATE_TIME_SUCCESS), HttpStatus.OK);
     }
 
+    @DeleteMapping("/{productIdx}")
+    public ResponseEntity<?> delete(@PathVariable Long productIdx, Authentication authentication){
+        PrincipalDetails details = (PrincipalDetails) authentication.getPrincipal();
+        productService.delete(details.getUser().getIdx(),productIdx);
+        return new ResponseEntity<>( new ResponseDto<>(ResponseEnum.PRODUCT_DELETE_SUCCESS), HttpStatus.OK);
+    }
+
 }
