@@ -35,7 +35,10 @@ public enum ResponseEnum {
     USER_ADDRESS_ADD_SUCCESS(200, "동네추가에 성공하였습니다"),
     USER_ADDRESS_ADD_OVER_MAX(500, "최대 2개의 동네만 추가할 수 있습니다"),
 
-    USER_MY_ADDRESSES_SUCCESS(200, "조회에 성공하였습니다");
+    USER_MY_ADDRESSES_SUCCESS(200, "조회에 성공하였습니다"),
+
+    USER_ADDRESS_NOT_FOUND(500, "존재하지 않는 동네입니다"),
+    USER_ADDRESS_UPDATE_SUCCESS(200, "기본 동네 설정에 성공하였습니다");
 
 
     private final int code;

@@ -71,4 +71,24 @@ public class UserAddressService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    public void changeDefaultYn(Long addressIdx,Long userIdx){
+        List<UserAddress> userAddresses = userAddressRepository.findByUserIdxFetch(userIdx);
+        if(userAddresses.isEmpty()){
+            throw new CustomApiException(ResponseEnum.USER_NOT_FOUND);
+        }
+
+        boolean isContain = userAddresses.stream().anyMatch(userAddress -> userAddress.getAddress().getIdx().equals(addressIdx));
+
+        if(!isContain){
+            throw new CustomApiException(ResponseEnum.USER_ADDRESS_NOT_FOUND);
+        }
+
+        for (UserAddress address:userAddresses) {
+            boolean defaultYn = address.getAddress().getIdx().equals(addressIdx);
+            address.setDefaultYn(defaultYn);
+        }
+
+    }
+
 }

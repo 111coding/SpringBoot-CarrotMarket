@@ -39,5 +39,12 @@ public class UserAddressController {
         return new ResponseEntity<>(new ResponseDto<>(ResponseEnum.USER_MY_ADDRESSES_SUCCESS, result),HttpStatus.OK);
     }
 
+    @PostMapping("/defaultYn/{addressIdx}")
+    public ResponseEntity<?> changeDefaultYn(@PathVariable Long addressIdx,Authentication authentication){
+        PrincipalDetails details = (PrincipalDetails) authentication.getPrincipal();
+        userAddressService.changeDefaultYn(addressIdx,details.getUser().getIdx());
+        return new ResponseEntity<>(new ResponseDto<>(ResponseEnum.USER_ADDRESS_UPDATE_SUCCESS), HttpStatus.OK);
+    }
+
 
 }
