@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,6 +30,13 @@ public class UserAddressController {
         PrincipalDetails details = (PrincipalDetails) authentication.getPrincipal();
         UserAddressDto result = userAddressService.addressAdd(addressRequestDto,details.getUser());
         return new ResponseEntity<>(new ResponseDto<>(ResponseEnum.USER_ADDRESS_ADD_SUCCESS, result),HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<?> myAddresses(Authentication authentication){
+        PrincipalDetails details = (PrincipalDetails) authentication.getPrincipal();
+        List<UserAddressDto> result = userAddressService.myAddresses(details.getUser().getIdx());
+        return new ResponseEntity<>(new ResponseDto<>(ResponseEnum.USER_MY_ADDRESSES_SUCCESS, result),HttpStatus.OK);
     }
 
 

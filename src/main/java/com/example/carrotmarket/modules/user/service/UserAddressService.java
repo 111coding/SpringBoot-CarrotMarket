@@ -65,4 +65,10 @@ public class UserAddressService {
         return new UserAddressDto(userAddress);
     }
 
+    public List<UserAddressDto> myAddresses(Long userIdx){
+        return userAddressRepository.findByUser_Idx(userIdx)
+                .stream().map(UserAddressDto::new)
+                .collect(Collectors.toList());
+    }
+
 }

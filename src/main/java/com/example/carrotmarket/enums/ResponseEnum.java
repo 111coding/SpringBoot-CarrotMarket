@@ -33,7 +33,9 @@ public enum ResponseEnum {
     USER_PROFILE_CHANGE_YET(200, "마지막 변경일로부터 30일 이후 변경 가능합니다"),
 
     USER_ADDRESS_ADD_SUCCESS(200, "동네추가에 성공하였습니다"),
-    USER_ADDRESS_ADD_OVER_MAX(500, "최대 2개의 동네만 추가할 수 있습니다");
+    USER_ADDRESS_ADD_OVER_MAX(500, "최대 2개의 동네만 추가할 수 있습니다"),
+
+    USER_MY_ADDRESSES_SUCCESS(200, "조회에 성공하였습니다");
 
 
     private final int code;
