@@ -45,7 +45,10 @@ public enum ResponseEnum {
     USER_ADDRESS_REMOVE_DO_NOT_HAVE_ADDRESS(500, "현재 등록되어 있지 않은 동네입니다"),
 
     PRODUCT_CATEGORY_SUCCESS(200,"조회에 성공하였습니다"),
-    PRODUCT_CATEGORY_FAIL(400,"조회에 실패하였습니다");
+    PRODUCT_CATEGORY_FAIL(400,"조회에 실패하였습니다"),
+
+    PRODUCT_UPLOAD_SUCCESS(200,"상품 업로드에 성공하였습니다"),
+    PRODUCT_UPLOAD_ADDRESS_NOT_MATCHED(404,"업로드할 수 없는 동네입니다");
 
 
     private final int code;

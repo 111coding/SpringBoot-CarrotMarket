@@ -2,6 +2,7 @@ package com.example.carrotmarket.modules.product.domain.entity;
 
 import com.example.carrotmarket.modules.address.domain.entity.Address;
 import com.example.carrotmarket.modules.file.domain.entity.File;
+import com.example.carrotmarket.modules.product.domain.dto.ProductRequestDto;
 import com.example.carrotmarket.modules.user.domain.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +14,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -69,5 +71,17 @@ public class Product {
     @Column(name = "create_at", nullable = false)
     private Timestamp createAt;
 
+    public Product(ProductRequestDto requestDto, User user){
+        this.user = user;
+        this.address = Address.builder().idx(requestDto.getAddressIdx()).build();
+        this.title = requestDto.getTitle();
+        this.content = requestDto.getContent();
+        this.category = ProductCategory.builder().idx(requestDto.getCategoryIdx()).build();
+        this.imageFiles = requestDto.getImageFileIdxList()
+                .stream()
+                .map(fileIdx -> File.builder().idx(fileIdx).build())
+                .collect(Collectors.toList());
+        this.price = requestDto.getPrice();
+    }
 
 }
