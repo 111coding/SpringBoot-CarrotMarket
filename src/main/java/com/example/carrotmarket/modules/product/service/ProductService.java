@@ -4,6 +4,7 @@ import com.example.carrotmarket.enums.ResponseEnum;
 import com.example.carrotmarket.handler.exception.CustomApiException;
 import com.example.carrotmarket.modules.product.domain.dto.ProductListResponseDto;
 import com.example.carrotmarket.modules.product.domain.dto.ProductRequestDto;
+import com.example.carrotmarket.modules.product.domain.dto.ProductResponseDto;
 import com.example.carrotmarket.modules.product.domain.entity.Product;
 import com.example.carrotmarket.modules.product.domain.entity.ProductLike;
 import com.example.carrotmarket.modules.product.repository.ProductLikeRepository;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -87,6 +89,18 @@ public class ProductService {
             e.printStackTrace();
             throw new CustomApiException(ResponseEnum.PRODUCT_LIST_FAIL);
         }
+    }
+
+    @Transactional
+    public ProductResponseDto detail(Long idx, Long userIdx){
+        Optional<Product> productOpt = productRepository.findByIdx(idx);
+        Product product = productOpt.orElseThrow(() -> new CustomApiException(ResponseEnum.PRODUCT_NOT_FOUND));
+
+        ProductResponseDto dto = new ProductResponseDto(product);
+        boolean myLike = product.getLikes()
+                .stream().anyMatch(productLike -> Objects.equals(productLike.getUser().getIdx(), userIdx));
+        dto.setMyLike(myLike);
+        return dto;
     }
 
 }

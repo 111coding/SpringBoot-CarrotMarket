@@ -54,7 +54,10 @@ public enum ResponseEnum {
     PRODUCT_LIKE_FAIL(500,"실패"),
 
     PRODUCT_LIST_SUCCESS(200,"조회에 성공하였습니다"),
-    PRODUCT_LIST_FAIL(400,"조회에 실패하였습니다");
+    PRODUCT_LIST_FAIL(400,"조회에 실패하였습니다"),
+
+    PRODUCT_DETAIL_SUCCESS(200,"조회에 성공하였습니다"),
+    PRODUCT_NOT_FOUND(400,"존재하지 않는 상품입니다");
 
 
     private final int code;
